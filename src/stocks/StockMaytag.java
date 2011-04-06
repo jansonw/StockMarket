@@ -1,4 +1,4 @@
-package Stocks;
+package stocks;
 
 
 public class StockMaytag extends StockBase {

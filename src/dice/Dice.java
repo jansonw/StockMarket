@@ -1,5 +1,8 @@
-import java.util.Random;
+package dice;
 
+import helper.Pair;
+
+import java.util.Random;
 
 public class Dice {
 	
