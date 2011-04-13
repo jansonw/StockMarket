@@ -1,23 +1,22 @@
-package menu;
+package view.menu;
+
+import java.awt.event.ActionListener;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import controller.Controller;
+import transferobject.NewGameTransferObject;
 
 @SuppressWarnings("serial")
-public class Gui extends JFrame {	
-	private Controller controller;
+public class Menu extends JFrame {	
 	
 	private JPanel currentPanel;
 	private MainMenu mainMenu;
 	private NewGameMenu newGameMenu;
 	
-	public Gui(Controller controller) {
-		this.controller = controller;
-		
-		mainMenu = new MainMenu(controller);
-		newGameMenu = new NewGameMenu(controller);
+	public Menu() {
+		mainMenu = new MainMenu();
+		newGameMenu = new NewGameMenu();
 		
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setTitle("Stock Market Game");
@@ -58,5 +57,14 @@ public class Gui extends JFrame {
 
 	public void handleQuitGame() {
 		newGameMenu.handleQuitGame();		
+	}
+	
+	public void addActionListeners(ActionListener listener) {
+		mainMenu.addActionListeners(listener);
+		newGameMenu.addActionListeners(listener);
+	}
+
+	public NewGameTransferObject getNewGameTransferObject() {
+		return newGameMenu.getNewGameTransferObject();
 	}
 }

@@ -1,22 +1,18 @@
-package menu;
+package view.menu;
+
+import global.Listeners;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
-import controller.Controller;
-
 @SuppressWarnings("serial")
 public class MainMenu extends JPanel {
-	
-	private Controller controller;
-
 	private JButton newGameButton;
 	private JButton saveGameButton;
 	private JButton loadGameButton;
@@ -26,15 +22,10 @@ public class MainMenu extends JPanel {
 	private final int BORDER = 10;
 
 	
-	public MainMenu(Controller controller) {
-		this.controller = controller;
-		
+	public MainMenu() {
 		this.setBorder(BorderFactory.createEmptyBorder(BORDER, BORDER, BORDER, BORDER));
 				
-		initComponents();
-		initListeners();
-		
-		
+		initComponents();		
 	}
 	
 	private void initComponents() {
@@ -67,24 +58,12 @@ public class MainMenu extends JPanel {
 		c.gridy = 4;
 		this.add(quitButton, c);
 	}
-	
-	private void initListeners() {
-		newGameButton.addActionListener(new ActionListener() {
 
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				controller.handleNewGame();			
-			}
-			
-		});
+	public void addActionListeners(ActionListener listener) {
+		newGameButton.setActionCommand(Listeners.MENU_NEW_GAME_BUTTON);
+		newGameButton.addActionListener(listener);
 		
-		quitButton.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				controller.handleQuitGame();			
-			}
-			
-		});
+		quitButton.setActionCommand(Listeners.MENU_QUIT_GAME_BUTTON);
+		quitButton.addActionListener(listener);
 	}
 }

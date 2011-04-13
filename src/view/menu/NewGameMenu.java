@@ -1,12 +1,12 @@
-package menu;
+package view.menu;
 
-import global.Constants;
+import global.States;
 import global.CurrentState;
+import global.Listeners;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
@@ -17,18 +17,16 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 
+import transferobject.NewGameTransferObject;
+
 import job.DeepSeaDiver;
 import job.Doctor;
 import job.JobBase;
 import job.Policeman;
 import job.Prospector;
 
-import controller.Controller;
-
 @SuppressWarnings("serial")
 public class NewGameMenu extends JPanel {
-	private Controller controller;
-	
 	private CurrentState currentState = CurrentState.getInstance();
 	
 	private JLabel mainLabel;
@@ -46,14 +44,11 @@ public class NewGameMenu extends JPanel {
 	
 	private final int BORDER = 10;
 	
-	public NewGameMenu(Controller controller) {
-		this.controller = controller;
-		
+	public NewGameMenu() {		
 		this.setBorder(BorderFactory.createEmptyBorder(BORDER, BORDER, BORDER, BORDER));
 		
 		initComponents();
-		initListeners();
-		currentState.setCurrentState(Constants.NEW_GAME_MENU_GET_NUM_PLAYERS);
+		currentState.setCurrentState(States.NEW_GAME_MENU_GET_NUM_PLAYERS);
 		initialize();
 	}
 	
@@ -122,28 +117,6 @@ public class NewGameMenu extends JPanel {
 		this.add(exitButton, c);		
 	}
 	
-	private void initListeners() {
-		nextButton.addActionListener(new ActionListener() {
-						
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				if(textField.getText().trim() != null) {
-					controller.handleNewGameMenuNextButton(textField.getText().trim(), findSelectedJob());		
-				}					
-			}
-			
-		});
-		
-		exitButton.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				controller.handleNewGameMenuQuitButton();			
-			}
-			
-		});
-	}
-	
 	private JobBase findSelectedJob() {
 		JobBase returnJob = null;
 
@@ -163,15 +136,15 @@ public class NewGameMenu extends JPanel {
 	}
 
 	public void handleNewGameMenuNextButton() {
-		if(Constants.NEW_GAME_MENU_GET_NUM_PLAYERS.equals(currentState.getCurrentState())) {
+		if(States.NEW_GAME_MENU_GET_NUM_PLAYERS.equals(currentState.getCurrentState())) {
 			initialize();
 		}
-		else if (Constants.NEW_GAME_MENU_ADD_PLAYER.equals(currentState.getCurrentState())) {
+		else if (States.NEW_GAME_MENU_ADD_PLAYER.equals(currentState.getCurrentState())) {
 			mainLabel.setText("Enter Player Name");
 			nextButton.setText("Add Player");
 			showJobRadioButtons(true);
 		}
-		else if (Constants.NEW_GAME_MENU_START_GAME.equals(currentState.getCurrentState())) {
+		else if (States.NEW_GAME_MENU_START_GAME.equals(currentState.getCurrentState())) {
 			nextButton.setText("Start Game");
 			mainLabel.setText("Click \"Start Game\"!");
 			showJobRadioButtons(false);
@@ -200,5 +173,22 @@ public class NewGameMenu extends JPanel {
 		nextButton.setText("Okay");
 		textField.setVisible(true);
 		showJobRadioButtons(false);	
+	}
+
+	public void addActionListeners(ActionListener listener) {
+		nextButton.setActionCommand(Listeners.NEW_GAME_NEXT_BUTTON);
+		nextButton.addActionListener(listener);
+		
+		exitButton.setActionCommand(Listeners.NEW_GAME_QUIT_BUTTON);
+		exitButton.addActionListener(listener);
+		
+	}
+
+	public NewGameTransferObject getNewGameTransferObject() {
+		NewGameTransferObject returnObject = new NewGameTransferObject();
+		returnObject.setUserInput(textField.getText().trim());
+		returnObject.setSelectedJob(findSelectedJob());
+		
+		return returnObject;
 	}
 }
